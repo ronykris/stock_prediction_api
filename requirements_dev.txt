@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+pydantic
+prophet
+pandas
+yfinance
+pytest
