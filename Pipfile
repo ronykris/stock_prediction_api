@@ -10,6 +10,8 @@ pydantic = "*"
 pandas = "*"
 yfinance = "*"
 prophet = "*"
+pytest = "*"
+httpx = "*"
 
 [dev-packages]
 
