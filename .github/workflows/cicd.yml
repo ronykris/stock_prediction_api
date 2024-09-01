@@ -61,7 +61,6 @@ jobs:
         docker build -t "asia-south1-docker.pkg.dev/ecomscraper/images/stock-prediction-api:latest" ./
         docker push "asia-south1-docker.pkg.dev/ecomscraper/images/stock-prediction-api:latest"
     - name: Deploy to Cloud Run
-      id: deploy
       uses: google-github-actions/deploy-cloudrun@v0
       with:
         image: "asia-south1-docker.pkg.dev/ecomscraper/images/stock-prediction-api:latest"
