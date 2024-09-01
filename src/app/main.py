@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List
-from stock_prediction_api.model import predict
+from src.model import predict
 
 app = FastAPI()
 
