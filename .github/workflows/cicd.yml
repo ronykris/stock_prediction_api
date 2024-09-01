@@ -52,8 +52,8 @@ jobs:
       uses: "google-github-actions/auth@v0"
       with:
         token_format: 'access_token'
-        workload_identity_provider: '${{ var.WIF_PROVIDER }}'
-        service_account: '${{ var.WIF_SERVICE_ACCOUNT }}'
+        workload_identity_provider: '${{ vars.WIF_PROVIDER }}'
+        service_account: '${{ vars.WIF_SERVICE_ACCOUNT }}'
     - name: Push to GCloud
       id: deploy
       #uses: google-github-actions/deploy-cloudrun@v0
