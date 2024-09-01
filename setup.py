@@ -12,6 +12,7 @@ setup(
         "pandas",
         "yfinance",
         "prophet",
-        "pytest"
+        "pytest",
+        "httpx"
     ],
 )

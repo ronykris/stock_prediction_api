@@ -5,3 +5,4 @@ prophet
 pandas
 yfinance
 pytest
+httpx
