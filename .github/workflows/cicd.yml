@@ -37,12 +37,6 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     - name: Build and push
-      #uses: docker/build-push-action@v6
-      #with:
-      #  push: true
-      #  tags: ${{ secrets.DOCKERHUB_USERNAME }}/stock-prediction-api:latest
-      #env:
-      #  IMAGE_ID: $(docker images -q stock-prediction-api:$(date +%s))
       run: |
         docker tag stock-prediction-api ${{ secrets.DOCKERHUB_USERNAME }}/stock-prediction-api:latest
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/stock-prediction-api:latest
@@ -51,14 +45,28 @@ jobs:
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
-    - name: Deploy to server
-      uses: appleboy/ssh-action@master
+    - name: "Checkout"
+      uses: "actions/checkout@v3"
+    - name: Google Auth
+      id: "auth"
+      uses: "google-github-actions/auth@v0"
       with:
-        host: ${{ secrets.SERVER_HOST }}
-        username: ${{ secrets.SERVER_USERNAME }}
-        key: ${{ secrets.SERVER_SSH_KEY }}
-        script: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/stock-prediction-api:latest
-          docker stop stock-prediction-api || true
-          docker rm stock-prediction-api || true
-          docker run -d --name stock-prediction-api -p 8000:8000 ${{ secrets.DOCKER_USERNAME }}/stock-prediction-api:latest
+        token_format: 'access_token'
+        workload_identity_provider: '${{ var.WIF_PROVIDER }}'
+        service_account: '${{ var.WIF_SERVICE_ACCOUNT }}'
+    - name: Push to GCloud
+      id: deploy
+      uses: google-github-actions/deploy-cloudrun@v0
+      run: |-
+        docker build -t "asia-south1-docker.pkg.dev/ecomscraper/images/stock-prediction-api:latest" ./
+        docker push "asia-south1-docker.pkg.dev/ecomscraper/images/stock-prediction-api:latest"
+    - name: Deploy to Cloud Run
+      id: deploy
+      uses: google-github-actions/deploy-cloudrun@v0
+      with:
+        image: "asia-south1-docker.pkg.dev/ecomscraper/images/stock-prediction-api:latest"
+        flags: |
+            --allow-unauthenticated
+      
+    - name: Show Output
+      run: echo ${{ steps.deploy.outputs.url }}
