@@ -42,8 +42,8 @@ jobs:
       #  push: true
       #  tags: ${{ secrets.DOCKERHUB_USERNAME }}/stock-prediction-api:latest
       run: |
-        IMAGE_ID=$(docker images -q stock-prediction-api:$(date +%s))
-        docker --tag $IMAGE_ID ${{ secrets.DOCKERHUB_USERNAME }}/stock-prediction-api:latest
+        IMAGE_ID: $(docker images -q stock-prediction-api:$(date +%s))
+        docker tag $IMAGE_ID ${{ secrets.DOCKERHUB_USERNAME }}/stock-prediction-api:latest
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/stock-prediction-api:latest
 
   deploy:
