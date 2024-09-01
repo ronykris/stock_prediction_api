@@ -21,6 +21,7 @@ jobs:
         pip install .
     - name: Run tests
       run: |
+        export PYTHONPATH=$PYTHONPATH:$(pwd)/src
         pytest tests/test_stock_prediction_api.py
 
   build-and-push:
