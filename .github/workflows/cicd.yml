@@ -30,7 +30,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag stock-prediction-api:$(date +%s)
+      run: docker build . --file Dockerfile --tag stock-prediction-api
     - name: Log in to Docker Hub
       uses: docker/login-action@v1
       with:
@@ -41,10 +41,10 @@ jobs:
       #with:
       #  push: true
       #  tags: ${{ secrets.DOCKERHUB_USERNAME }}/stock-prediction-api:latest
-      env:
-        IMAGE_ID: $(docker images -q stock-prediction-api:$(date +%s))
+      #env:
+      #  IMAGE_ID: $(docker images -q stock-prediction-api:$(date +%s))
       run: |
-        docker tag $IMAGE_ID ${{ secrets.DOCKERHUB_USERNAME }}/stock-prediction-api:latest
+        docker tag stock-prediction-api ${{ secrets.DOCKERHUB_USERNAME }}/stock-prediction-api:latest
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/stock-prediction-api:latest
 
   deploy:
