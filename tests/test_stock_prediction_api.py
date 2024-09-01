@@ -1,5 +1,5 @@
 from fastapi.testclient import TestClient
-from stock_prediction_api.app.main import app
+from src.app.main import app
 
 client = TestClient(app)
 
